@@ -1,7 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { TextInput } from '../assets/components/UIkit';
+import { useDispatch } from 'react-redux';
+import { PrimaryButton, SelectBox, TextInput } from '../assets/components/UIkit';
+import {saveProduct} from '../reducks/products/operations';
 
 const ProductEdit = () => {
+    const dispatch = useDispatch();
+
     const [name, setName] = useState(""),
             [description, setDescription] = useState(""),
             [category, setCategory] = useState(""),
@@ -20,6 +24,18 @@ const ProductEdit = () => {
         setPrice(event.target.value)
     }, [setPrice]);
 
+    const categories = [
+        {id: 'tops',name: 'TOPS'},
+        {id: 'shirts',name: 'SHIRTS'},
+        {id: 'pants',name: 'PANTS'},
+    ];
+    
+    const genders = [
+        {id: 'all',name: 'ALL'},
+        {id: 'male',name: 'Men'},
+        {id: 'female',name: 'Women'},
+    ];
+
     return (
         <section>
             <h2 className='u-text__headline u-text-center'>Resister an item.</h2>
@@ -32,10 +48,24 @@ const ProductEdit = () => {
                     fullWidth={true} label={'Item Description'} multiline={true} required={true}
                     onChange={inputDescription} rows={5} value={description} type={'text'}
                 />
+                <SelectBox
+                    label={'category'} required={true} options={categories} select={setCategory} value={category}
+                />
+                <SelectBox
+                    label={'gender'} required={true} options={genders} select={setGender} value={gender}
+                />
                 <TextInput
                     fullWidth={true} label={'Item Price'} multiline={false} required={true}
                     onChange={inputPrice} rows={1} value={price} type={'number'}
                 />
+                <div className='module-spacer--medium'/>
+                <div className='center'>
+                    <PrimaryButton
+                        label={'Add the item'}
+                        onClick={() => dispatch(saveProduct(name, description, category, gender, price))}
+                    />
+                </div>
+
             </div>
         </section>
     )
