@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { PrimaryButton, SelectBox, TextInput } from '../assets/components/UIkit';
+import ImageArea from '../components/Products/imageArea';
+import { PrimaryButton, SelectBox, TextInput } from '../components/UIkit';
 import {saveProduct} from '../reducks/products/operations';
 
 const ProductEdit = () => {
@@ -10,7 +11,8 @@ const ProductEdit = () => {
             [description, setDescription] = useState(""),
             [category, setCategory] = useState(""),
             [gender, setGender] = useState(""),
-            [price, setPrice] = useState("");
+            [price, setPrice] = useState(""),
+            [images, setImages] = useState([]);
 
     const inputName = useCallback((event) => {
         setName(event.target.value)
@@ -40,6 +42,7 @@ const ProductEdit = () => {
         <section>
             <h2 className='u-text__headline u-text-center'>Resister an item.</h2>
             <div className='c-section-container'>
+                <ImageArea images={images} setImages={setImages}/>
                 <TextInput
                     fullWidth={true} label={'Item Name'} multiline={false} required={true}
                     onChange={inputName} rows={1} value={name} type={'text'}
@@ -51,9 +54,6 @@ const ProductEdit = () => {
                 <SelectBox
                     label={'category'} required={true} options={categories} select={setCategory} value={category}
                 />
-                {/* ???????????????????????????????????????????????????????????????????????????????????????????? */}
-                {/* ?????????? useDispatch() or useCallback() or directly throw a Method of useState() ????????? */}
-                {/* ???????????????????????????????????????????????????????????????????????????????????????????? */}
                 <SelectBox
                     label={'gender'} required={true} options={genders} select={setGender} value={gender}
                 />
@@ -65,7 +65,7 @@ const ProductEdit = () => {
                 <div className='center'>
                     <PrimaryButton
                         label={'Add the item'}
-                        onClick={() => dispatch(saveProduct(name, description, category, gender, price))}
+                        onClick={() => dispatch(saveProduct(name, description, category, gender, price, images))}
                     />
                 </div>
 
