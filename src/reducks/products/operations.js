@@ -3,7 +3,7 @@ import { db, FirebaseTimeStamp } from "../../firebase"
 
 const productsRef = db.collection('products');
 
-export const saveProduct = (name, description, category,  gender, price, images) => {
+export const saveProduct = (id, name, description, category,  gender, price, images, sizes) => {
     return async (dispatch) => {
         const timestamp = FirebaseTimeStamp.now()
 
@@ -14,15 +14,18 @@ export const saveProduct = (name, description, category,  gender, price, images)
             images: images,
             name: name,
             price: parseInt(price, 10),
+            sizes: sizes,
             updated_at: timestamp
         }
 
-        const ref = productsRef.doc();
-        const id = ref.id
-        data.id = id
-        data.created_at = timestamp
-
-        return productsRef.doc(id).set(data)
+        //In the case of New Creation (Not Editing)
+        if(id === ''){
+            const ref = productsRef.doc();
+            id = ref.id
+            data.id = id
+            data.created_at = timestamp
+        }
+        return productsRef.doc(id).set(data, {merge: true})
             .then(() => {
                 dispatch(push('/'))
             }).catch((error) => {
