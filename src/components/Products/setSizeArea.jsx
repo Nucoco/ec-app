@@ -47,7 +47,7 @@ const SetSizeArea = (props) => {
                 const newSizes = props.sizes
                 newSizes[index] = {size: size, quantity: quantity}
                 props.setSizes(newSizes)
-                props.setIndex(newSizes.length)
+                setIndex(newSizes.length)
                 setSize('')
                 setQuantity(0)
                 console.log('create')
@@ -66,6 +66,7 @@ const SetSizeArea = (props) => {
         props.setSizes(newSizes)
     }
 
+    //ComponentDidUpdate()
     useEffect(() => {
         setIndex(props.sizes.length)
     },[props.sizes.length])
@@ -82,41 +83,40 @@ const SetSizeArea = (props) => {
                             <TableCell className={classes.iconCell} />
                         </TableRow>
                     </TableHead>
+                    {/* <div>props.sizes.length: {props.sizes.length}</div> */}
                     <TableBody>
                         {props.sizes.length > 0 && (
                             props.sizes.map((item, i) => {
-                                <TableRow key={item.size}>
-                                    <TableCell component='th' scope='row'>{item.size}</TableCell>
-                                    <TableCell>{item.quantity}</TableCell>
-                                    <TableCell className={classes.iconCell}>
-                                        <IconButton className={classes.iconCell} onClick={() => editSize(i, item.size, item.quantity)}>
-                                            <Edit />
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell className={classes.iconCell}>
-                                        <IconButton className={classes.iconCell} onClick={() => deleteSize(i)}>
-                                            <Delete />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
+                                return (
+                                    <TableRow key={item.size}>
+                                        <TableCell component='th' scope='row'>{item.size}</TableCell>
+                                        <TableCell>{item.quantity}</TableCell>
+                                        <TableCell className={classes.iconCell}>
+                                            <IconButton className={classes.iconCell} onClick={() => editSize(i, item.size, item.quantity)}>
+                                                <Edit />
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell className={classes.iconCell}>
+                                            <IconButton className={classes.iconCell} onClick={() => deleteSize(i)}>
+                                                <Delete />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                )
                             })
                         )}
                     </TableBody>
                 </Table>
-                    <TableRow>
-                        <TableCell>
-                            <TextInput 
-                                fullWidth={false} label={'size'} multiline={false} required={true}
-                                onChange={inputSize} rows={1} value={size} type={'text'}
-                            />
-                            </TableCell>
-                        <TableCell>
-                        <TextInput 
-                            fullWidth={false} label={'quantity'} multiline={false} required={true}
-                            onChange={inputQuantity} rows={1} value={quantity} type={'number'}
-                        />
-                        </TableCell>
-                    </TableRow>
+                <div>
+                    <TextInput 
+                        fullWidth={false} label={'size'} multiline={false} required={true}
+                        onChange={inputSize} rows={1} value={size} type={'text'}
+                    />
+                    <TextInput 
+                        fullWidth={false} label={'quantity'} multiline={false} required={true}
+                        onChange={inputQuantity} rows={1} value={quantity} type={'number'}
+                    />
+                </div>
                 <IconButton className={classes.checkIcon} onClick={() => addSize(index, size, quantity)}>
                     <CheckCircle />
                 </IconButton>
