@@ -19,17 +19,17 @@ const SizeTable = (props) => {
             <Table>
                 <TableBody>
                     {sizes.length > 0 && (
-                        sizes.map((size) => (
-                            <TableRow key={size.size}>
+                        sizes.map((aSize) => (
+                            <TableRow key={aSize.size}>
                                 <TableCell component='th' scope='row'>
-                                    {size.size}
+                                    {aSize.size}
                                 </TableCell>
                                 <TableCell>
-                                    {size.quantity} stk.
+                                    {aSize.quantity} stk.
                                 </TableCell>
                                 <TableCell className={classes.iconCell}>
-                                    {size.quantity > 0 ? (
-                                        <IconButton>
+                                    {aSize.quantity > 0 ? (
+                                        <IconButton onClick={() => props.addProduct(aSize.size)}>
                                             <ShoppingCart />
                                         </IconButton>
                                     ) : (
