@@ -1,10 +1,11 @@
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 import { AddCircle, ExitToApp, History, Person, Search } from '@material-ui/icons';
 import { push } from 'connected-react-router';
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import {TextInput} from '../UIkit'
 import {signOut} from '../../reducks/users/operations'
+import { db } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -37,9 +38,17 @@ const ClosableDrawer = (props) => {
     },[setKeyword]);
 
     const selectMenu = (event, path) => {
+        console.log('selectedMenu!Start!')
         dispatch(push(path))
         props.onClose(event)
+        console.log('selectedMenu!End!')
     }
+
+    const [filters, setFilters] = useState([
+        {func: selectMenu, label: 'All', id: 'all', value: "/"},
+        {func: selectMenu, label: "Men's", id: 'male', value: "/?gender=male"},
+        {func: selectMenu, label: "Women's", id: 'female', value: "/?gender=female"}
+    ])
 
     const menus = [
         {func: selectMenu, label: 'Add an item',    icon: <AddCircle />, id: 'register', value: "/product/edit"},
@@ -47,6 +56,19 @@ const ClosableDrawer = (props) => {
         {func: selectMenu, label: 'Profile',        icon: <Person />,    id: 'profile',  value: "/user/mypage"}        
     ]
 
+    //ComponentDidMount()
+    useEffect(() => {
+        db.collection('categories').orderBy('order', 'asc').get()
+            .then((snapshots) => {
+                const list = [];
+                snapshots.forEach(snapshot => {
+                    const category = snapshot.data();
+                    list.push({func: selectMenu, label: category.name, id: category.id, value: `/?category=${category.id}`})
+                })
+                setFilters(prevState => [...prevState, ...list])
+            })
+    }, []);
+    
     return (
         <nav className={classes.drawer}>
             <Drawer 
@@ -59,7 +81,7 @@ const ClosableDrawer = (props) => {
                 ModalProps={{keepMounted: true}}
             >
                 <div 
-                    onClose={(event) => props.onClose(event)}
+                    onClick={(event) => props.onClose(event)}
                     onKeyDown={(event) => props.onClose(event)}
                 >
                     <div className={classes.searchField}>
@@ -87,6 +109,14 @@ const ClosableDrawer = (props) => {
                             </ListItemIcon>
                             <ListItemText primary={'Logout'} />
                         </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        {filters.map((filter) => (
+                            <ListItem button key={filter.id} onClick={(event) => filter.func(event, filter.value)} >
+                                <ListItemText primary={filter.label} />
+                            </ListItem>
+                        ))}
                     </List>
                 </div>
             </Drawer>

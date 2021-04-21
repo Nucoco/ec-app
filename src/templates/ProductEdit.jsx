@@ -15,12 +15,13 @@ const ProductEdit = () => {
         // console.log('After  / ', id)
     }
 
-    const [name, setName] = useState(""),
-            [description, setDescription] = useState(""),
+    const   [categories, setCategories] = useState([]),
             [category, setCategory] = useState(""),
+            [description, setDescription] = useState(""),
             [gender, setGender] = useState(""),
-            [price, setPrice] = useState(""),
             [images, setImages] = useState([]),
+            [name, setName] = useState(""),
+            [price, setPrice] = useState(""),
             [sizes, setSizes] = useState([]);
 
     const inputName = useCallback((event) => {
@@ -35,11 +36,11 @@ const ProductEdit = () => {
         setPrice(event.target.value)
     }, [setPrice]);
 
-    const categories = [
-        {id: 'tops',name: 'TOPS'},
-        {id: 'shirts',name: 'SHIRTS'},
-        {id: 'pants',name: 'PANTS'},
-    ];
+    // const categories = [
+    //     {id: 'tops',name: 'TOPS'},
+    //     {id: 'shirts',name: 'SHIRTS'},
+    //     {id: 'pants',name: 'PANTS'},
+    // ];
     
     const genders = [
         {id: 'all',name: 'ALL'},
@@ -47,7 +48,7 @@ const ProductEdit = () => {
         {id: 'female',name: 'Women'},
     ];
 
-    //Instead of ComponentDidMount()
+    //ComponentDidMount()
     useEffect(() => {
         if(id !== ''){
             db.collection('products').doc(id).get()
@@ -64,6 +65,22 @@ const ProductEdit = () => {
                 })
         }
     }, [id])
+
+    //ComponentDidMount()
+    useEffect(() => {
+        db.collection('categories').orderBy('order', 'asc').get()
+            .then(snapshots => {
+                const list = [];
+                snapshots.forEach(snapshot => {
+                    const data = snapshot.data();
+                    list.push({
+                        id: data.id,
+                        name: data.name
+                    });
+                });
+                setCategories(list);
+            });
+    }, []);
 
     return (
         <section>

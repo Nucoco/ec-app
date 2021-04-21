@@ -38,6 +38,7 @@ const Header = () => {
             return;
         }
         setOpen(!open)
+        console.log('open:' + open);
     },[setOpen, open])
 
     return (
