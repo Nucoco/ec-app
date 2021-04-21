@@ -1,4 +1,4 @@
-import {signInAction, signOutAction} from './actions';
+import {fetchOrdersHistoryAction, signInAction, signOutAction} from './actions';
 import {push} from 'connected-react-router';
 import {auth, db, FirebaseTimeStamp} from '../../firebase/index';
 import { fetchProductsInCartAction } from '../users/actions';
@@ -10,6 +10,26 @@ export const addProductToCart = (addedProduct) => {
         addedProduct['cartId'] = cartRef.id;
         await cartRef.set(addedProduct);
         dispatch(push('/'));
+    }
+}
+
+export const fetchOrdersHistory = () => {
+    return async (dispatch, getState) => {
+        const uid = getState().users.uid;
+        const list = [];
+
+        db.collection('users').doc(uid)
+            .collection('orders')
+            .orderBy('updated_at', 'desc')
+            .get()
+            .then((snapshots) => {
+                snapshots.forEach((snapshot) => {
+                    const data = snapshot.data();
+                    list.push(data);
+                })
+                
+                dispatch(fetchOrdersHistoryAction(list));
+            })
     }
 }
 
@@ -94,6 +114,16 @@ export const signIn = (email, password) => {
     }
 }
 
+export const signOut = () => {
+    return async (dispatch) => {
+        auth.signOut()
+            .then(() => {
+                dispatch(signOutAction())
+                dispatch(push('/signin'))
+            })
+    }
+}
+
 export const signUp = (username, email, password, confirmPassword) => {
     return async (dispatch) => {
         //Validation
@@ -132,16 +162,6 @@ export const signUp = (username, email, password, confirmPassword) => {
                             dispatch(push('/'))
                         })
                 }
-            })
-    }
-}
-
-export const signOut = () => {
-    return async (dispatch) => {
-        auth.signOut()
-            .then(() => {
-                dispatch(signOutAction())
-                dispatch(push('/signin'))
             })
     }
 }
