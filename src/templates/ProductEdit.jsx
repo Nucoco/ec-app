@@ -68,6 +68,7 @@ const ProductEdit = () => {
 
     //ComponentDidMount()
     useEffect(() => {
+        console.log('setCategories!!');
         db.collection('categories').orderBy('order', 'asc').get()
             .then(snapshots => {
                 const list = [];
