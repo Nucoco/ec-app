@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from 'react-router';
 import Auth from "./Auth";
-import { SignIn, Home, SignUp, Reset, ProductEdit, ProductList, ProductDetail, CartList, OrderConfirm, OrderHistory } from './templates';
+import { SignIn, SignUp, Reset, ProductEdit, ProductList, ProductDetail, CartList, OrderConfirm, OrderHistory } from './templates';
 
 const Router = () => {
     return (
