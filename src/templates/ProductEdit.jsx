@@ -50,6 +50,19 @@ const ProductEdit = () => {
 
     //ComponentDidMount()
     useEffect(() => {
+    //     const path = (
+    //         document.currentScript
+    //             ? document.currentScript.src
+    //             : document.getElementsByTagName('script')[document.getElementsByTagName('script').length-1].src
+    //         )
+    //         .replace(new RegExp('^'+window.location.origin), '')
+    //         .replace(/[^\/]+$/, '')
+    //     ;
+    //     const filename = path.split("/").reverse()[0].split('.')[0];
+    //     console.log("Filename: " + path)
+    //     const e = new Error('Could not parse input');// Error object has the path of an error occurred file.
+    //     console.log(e);// e.filename can show filename, but it's supported only FireFox.
+        console.log("CDM: ProductEdit")
         if(id !== ''){
             db.collection('products').doc(id).get()
                 .then(snapshot => {
