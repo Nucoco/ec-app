@@ -25,12 +25,13 @@ const OrderHistory = () => {
     const selector = useSelector((state) => state);
     const orders = getOrdersHistory(selector);
 
+    console.log('orders: ', orders);
+
     //ComponentDidMount()
     useEffect(() => {
+        console.log('CDM: OrderHistory')
         dispatch(fetchOrdersHistory());
     },[]);
-
-    console.log(orders);
 
     return (
         <section className='c-section-wrapin'>

@@ -7,13 +7,21 @@ import * as History from 'history';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+console.log('<-----Here is the Top of /index.js----->')
+
+console.log('   Get BrowserHistory')
 const history = History.createBrowserHistory();
+console.log('   CreateStore')
 export const store = createStore(history);
 
+console.log('<-----Rendering is started----->')
 ReactDOM.render(
   <Provider store={store}>
+    {console.log('   Provider was called in /index.js')}
     <ConnectedRouter history={history}>
+      {console.log('   ConnectedRouter was called in /index.js')}
       <App />
+      {console.log('   App was called in /index.js')}
     </ConnectedRouter>
   </Provider>,
   document.getElementById('root')

@@ -12,18 +12,21 @@ const ProductList = () => {
     const query = selector.router.location.search;
     const gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
     const category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
-
+    
+    console.log('HOME')
+    console.log('   selector: ', selector)
+    console.log('   getProducts(selector): ', products)
+    console.log('   ProductList will be rendered')
     
     //ComponentDidMount(), ComponentDidUpdate()
     useEffect(() => {
+        console.log('   CDM, CDU: ProductList triggered by query parameter in URL')
         dispatch(fetchProducts(gender, category))
     }, [query]);
 
-    console.log(products)
-
     return (
-        
         <section className='c-section-wrapin'>
+            {console.log('   ProductList is being rendered')}
             <div className='p-grid__row'>
                 {products.length > 0 && (
                     products.map((product) => (

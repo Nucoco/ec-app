@@ -34,7 +34,7 @@ const OrderHistoryItem = (props) => {
             <TextDetail label={'Order Amount'} value={price} />
 
             {order.products.length > 0 && (
-                <OrderedProducts products={order.products} />
+                <OrderedProducts order={order} />
             )}
 
             <div className='module-spacer--extra-extra-small' />

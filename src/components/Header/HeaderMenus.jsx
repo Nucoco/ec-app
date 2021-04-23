@@ -1,5 +1,5 @@
 import { Badge, IconButton } from '@material-ui/core'
-import { Favorite, Menu, ShoppingCart } from '@material-ui/icons'
+import { ControlCameraOutlined, Favorite, Menu, ShoppingCart } from '@material-ui/icons'
 import { push } from 'connected-react-router'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,7 +14,10 @@ const HeaderMenus = (props) => {
     let productsInCart = getProductsInCart(selector);
     const uid = getUserId(selector);
 
+    console.log('   HeaderMenus will rendered')
+
     useEffect(() => {
+        console.log('   CDM: HeaderMenus')
         const unsubscribe = db.collection('users').doc(uid).collection('cart')
             .onSnapshot((snapshots) => {    // onSnapshot() can reflect collection changes in FireStore on the client side in real time
                 snapshots.docChanges().forEach((change) => {
@@ -36,6 +39,7 @@ const HeaderMenus = (props) => {
                             break;
                     }
                 })
+                console.log('   CWU: HeaderMenus')
                 dispatch(fetchProductsInCart(productsInCart));
             })
             return () => unsubscribe(); // ComponentWillUnMount()
@@ -43,6 +47,7 @@ const HeaderMenus = (props) => {
 
     return (
         <>
+            {console.log('   HeaderMenus is being rendered')}
             <IconButton onClick={() => dispatch(push('/cart'))} >
                 <Badge badgeContent={productsInCart.length} color="secondary">
                     <ShoppingCart />

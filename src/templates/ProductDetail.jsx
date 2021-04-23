@@ -58,6 +58,7 @@ const ProductDetail = () => {
     
     //ComponentDidMount()
     useEffect(() => {
+        console.log('CDM: ProductDetail')
         db.collection('products').doc(id).get()
             .then((doc) => {
                 const data = doc.data();
@@ -66,6 +67,7 @@ const ProductDetail = () => {
     }, []);
 
     const addProduct = useCallback((selectedSize) => {
+        console.log('Create addProduct()')
         const timestamp = FirebaseTimeStamp.now();
         dispatch(addProductToCart({
             added_at: timestamp,
@@ -79,9 +81,12 @@ const ProductDetail = () => {
             size: selectedSize
         }))
     }, [product])
+
+    console.log('   ProductDetail will be rendered')
     
     return (
         <section className='c-section-wrapin'>
+            {console.log('   ProductDetail is being rendered')}
             {product && (
                 <div className='p-grid__row'>
                     <div className={classes.sliderBox}>

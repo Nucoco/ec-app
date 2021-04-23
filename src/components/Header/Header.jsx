@@ -38,19 +38,25 @@ const Header = () => {
             return;
         }
         setOpen(!open)
-        console.log('open:' + open);
+        // console.log('open:' + open);
     },[setOpen, open])
+
+    console.log('   Header will be rendered', '\n   isSignedIn: ' , isSignedIn)
 
     return (
         <div className={classes.root}>
+            {console.log('   Header is being rendered')}
             <AppBar position='fixed' className={classes.menuBar}>
+                {console.log('AppBar')}
                 <Toolbar className={classes.toolBar}>
+                    {console.log('ToolBar')}
                     <img
                         src={logo} alt='logo' width='128px' 
                         onClick={() => dispatch(push('/'))}
                     />
                     {isSignedIn && (
                         <div className={classes.iconButtons}>
+                            {console.log('HeaderMenus')}
                             <HeaderMenus handleDrawerToggle={handleDrawerToggle} />
                         </div>
                     )}

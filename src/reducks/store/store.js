@@ -5,6 +5,7 @@ import {connectRouter, routerMiddleware} from 'connected-react-router';
 import thunk from 'redux-thunk';
 
 export default function createStore(history){
+    console.log('Redux Create Store: Combine Reducers, Apply Middleware')
     return reduxCreateStore(
         combineReducers({
             router: connectRouter(history),

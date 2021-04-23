@@ -38,10 +38,8 @@ const ClosableDrawer = (props) => {
     },[setKeyword]);
 
     const selectMenu = (event, path) => {
-        console.log('selectedMenu!Start!')
         dispatch(push(path))
         props.onClose(event)
-        console.log('selectedMenu!End!')
     }
 
     const [filters, setFilters] = useState([
@@ -56,8 +54,11 @@ const ClosableDrawer = (props) => {
         {func: selectMenu, label: 'Profile',        icon: <Person />,    id: 'profile',  value: "/user/mypage"}        
     ]
 
+    console.log('   ClosableDrawer will be rendered')
+
     //ComponentDidMount()
     useEffect(() => {
+        console.log('   CDM: ClosableDrawer')
         db.collection('categories').orderBy('order', 'asc').get()
             .then((snapshots) => {
                 const list = [];
@@ -71,6 +72,7 @@ const ClosableDrawer = (props) => {
     
     return (
         <nav className={classes.drawer}>
+            {console.log('   ClosableDrawer is being rendered')}
             <Drawer 
                 container={container}
                 variant='temporary'

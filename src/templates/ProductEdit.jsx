@@ -8,11 +8,9 @@ import {saveProduct} from '../reducks/products/operations';
 const ProductEdit = () => {
     const dispatch = useDispatch();
     let id = window.location.pathname.split('/product/edit')[1];
-    // console.log('Before / ', id)
 
     if(id !== ''){
         id = id.split('/')[1];
-        // console.log('After  / ', id)
     }
 
     const   [categories, setCategories] = useState([]),
@@ -62,12 +60,12 @@ const ProductEdit = () => {
     //     console.log("Filename: " + path)
     //     const e = new Error('Could not parse input');// Error object has the path of an error occurred file.
     //     console.log(e);// e.filename can show filename, but it's supported only FireFox.
-        console.log("CDM: ProductEdit")
+        console.log("CDM, CDU: ProductEdit triggered by Product ID in URL")
         if(id !== ''){
             db.collection('products').doc(id).get()
                 .then(snapshot => {
                     const data = snapshot.data()
-                    // console.log(data)
+                    console.log(`FireStore-products-id(${id}).data: ` + data)
                     setImages(data.images);
                     setName(data.name);
                     setDescription(data.description);
@@ -81,7 +79,7 @@ const ProductEdit = () => {
 
     //ComponentDidMount()
     useEffect(() => {
-        console.log('setCategories!!');
+        console.log('CDM: ProductEdit(setCategories)');
         db.collection('categories').orderBy('order', 'asc').get()
             .then(snapshots => {
                 const list = [];

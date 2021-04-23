@@ -23,7 +23,8 @@ const useStyles = makeStyles({
 const OrderedProducts = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const products = props.products;
+    const products = props.order.products;
+    const orderId = props.order.id;
 
     const goToProductDetail = useCallback((id) => {
         dispatch(push('/product/' + id))
@@ -33,7 +34,8 @@ const OrderedProducts = (props) => {
         <List>
             {products.map((product) => (
                 <>
-                    <ListItem className={classes.list} key={product.id}>
+                    <ListItem className={classes.list} key={orderId + '-' + product.id + product.size}>
+                        {console.log('key' , orderId + '-' + product.id + product.size)}
                         <ListItemAvatar>
                             <img 
                                 className={classes.image}

@@ -3,7 +3,10 @@ import { Switch, Route } from 'react-router';
 import Auth from "./Auth";
 import { SignIn, SignUp, Reset, ProductEdit, ProductList, ProductDetail, CartList, OrderConfirm, OrderHistory } from './templates';
 
+console.log('ROUTER')
+
 const Router = () => {
+    console.log('Router.jsx')
     return (
         <Switch>
             <Route exact path={"/signup"} component={SignUp} />
