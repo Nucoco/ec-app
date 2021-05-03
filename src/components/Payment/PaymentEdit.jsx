@@ -1,11 +1,21 @@
 import React, { useCallback } from 'react'
-import {CardElement} from '@stripe/react-stripe-js';
+import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import { useDispatch } from 'react-redux';
 import {PrimaryButton} from '../UIkit'
 import { push } from 'connected-react-router';
+import {registerCard} from '../../reducks/payments/operations'
 
 const PaymentEdit = () => {
     const dispatch = useDispatch()
+    //useStripe() and useElements() are Hooks prepared by Stripe. Hooks enable to get 'the' data from any files.  
+    const stripe = useStripe()
+    console.log('stripe: ', stripe)
+    const elements = useElements()
+    console.log('elements: ', elements)
+
+    const register = useCallback(() => {
+        dispatch(registerCard(stripe, elements))
+    }, [stripe, elements])
 
     const goBackToMyPage = useCallback(() => {
         dispatch(push('/user/mypage'))
@@ -33,6 +43,10 @@ const PaymentEdit = () => {
             />
             <div className='module-spacer--medium' />
             <div className='center'>
+                <PrimaryButton 
+                    label={"Save Card Info"}
+                    onClick={register}
+                />
                 <PrimaryButton 
                     label={"Back to MyPage"}
                     onClick={goBackToMyPage}
