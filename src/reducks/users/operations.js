@@ -42,18 +42,20 @@ export const fetchProductsInCart = (products) => {
 export const listenAuthState = () => {
     return async (dispatch) => {
         return auth.onAuthStateChanged(user => {
+            console.log('user ', user)
             if(user){
                 const uid = user.uid
 
                 db.collection('users').doc(uid).get()
                     .then(snapshot => {
                         const data = snapshot.data()
+                        console.log('data: ', data)
 
                         dispatch(signInAction({
                             isSignedIn: true,
                             role: data.role,
                             uid: uid,
-                            username: user.username
+                            username: data.username
                         }))
                     })
 
@@ -94,7 +96,8 @@ export const signIn = (email, password) => {
                 const user = result.user
 
                 if(user){
-                    const uid = user.uid
+                console.log('username: ', user.username)
+                const uid = user.uid
 
                     db.collection('users').doc(uid).get()
                         .then(snapshot => {
@@ -156,6 +159,7 @@ export const signUp = (username, email, password, confirmPassword) => {
                         updated_at: timestamp,
                         username: username
                     }
+                    console.log('username: ', user.username)
 
                     db.collection('users').doc(uid).set(userInitialData)
                         .then(() => {
