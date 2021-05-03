@@ -19,10 +19,10 @@ export const fetchProductsInCartAction = (products) => {
 export const SIGN_IN = "SIGN_IN";
 export const signInAction = (userState) => {
     console.log('SIGN_IN is fired')
-    console.log('username: ' ,userState.username)
     return {
         type: "SIGN_IN",
         payload: {
+            email: userState.email,
             isSignedIn: true,
             role: userState.role,
             uid: userState.uid,
@@ -44,3 +44,11 @@ export const signOutAction = () => {
         }
     }
 };
+
+export const UPDATE_USER_STATE = "UPDATE_USER_STATE"
+export const updateUserStateAction = (userState) => {
+    return {
+        type: "UPDATE_USER_STATE",
+        payload: userState
+    }
+}
