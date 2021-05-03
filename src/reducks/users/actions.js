@@ -19,6 +19,7 @@ export const fetchProductsInCartAction = (products) => {
 export const SIGN_IN = "SIGN_IN";
 export const signInAction = (userState) => {
     console.log('SIGN_IN is fired')
+    console.log('username: ' ,userState.username)
     return {
         type: "SIGN_IN",
         payload: {
