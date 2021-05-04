@@ -67,7 +67,7 @@ exports.updatePaymentMethod = functions.https.onRequest((req, res) => {
 
         return stripe.paymentMethods.detach(
             req.body.prevPaymentMethodId
-        ).then((paymentMethod) => {
+        ).then((paymentMethod) => {//unused???
             return stripe.paymentMethods.attach(
                 req.body.nextPaymentMethodId,
                 {customer: req.body.customerId}
