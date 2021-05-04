@@ -41,9 +41,7 @@ exports.stripeCustomer = functions.https.onRequest((req, res) => {
 exports.retrievePaymentMethod = functions.https.onRequest((req, res) => {
     const corsHandler = cors({origin: true})
 
-    //Wrap your process with CORS. This way is a commonly used way to create an API.
     corsHandler(req, res, () => {
-        //whether the method type is POST
         if(req.method !== 'POST'){
             sendResponse(res, 405, {error: "Invalid Request method!!"})
         }
@@ -52,6 +50,30 @@ exports.retrievePaymentMethod = functions.https.onRequest((req, res) => {
             req.body.paymentMethodId
         ).then((paymentMethod) => {
             sendResponse(res, 200, paymentMethod)
+        }).catch((err) => {
+            sendResponse(res, 500, {error: err})
+        })
+    })
+})
+
+
+exports.updatePaymentMethod = functions.https.onRequest((req, res) => {
+    const corsHandler = cors({origin: true})
+
+    corsHandler(req, res, () => {
+        if(req.method !== 'POST'){
+            sendResponse(res, 405, {error: "Invalid Request method!!"})
+        }
+
+        return stripe.paymentMethods.detach(
+            req.body.prevPaymentMethodId
+        ).then((paymentMethod) => {
+            return stripe.paymentMethods.attach(
+                req.body.nextPaymentMethodId,
+                {customer: req.body.customerId}
+            ).then((nextPaymentMethod) => {
+                sendResponse(res, 200, nextPaymentMethod)
+            })
         }).catch((err) => {
             sendResponse(res, 500, {error: err})
         })
