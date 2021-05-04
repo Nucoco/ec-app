@@ -36,3 +36,24 @@ exports.stripeCustomer = functions.https.onRequest((req, res) => {
         })
     })
 })
+
+
+exports.retrievePaymentMethod = functions.https.onRequest((req, res) => {
+    const corsHandler = cors({origin: true})
+
+    //Wrap your process with CORS. This way is a commonly used way to create an API.
+    corsHandler(req, res, () => {
+        //whether the method type is POST
+        if(req.method !== 'POST'){
+            sendResponse(res, 405, {error: "Invalid Request method!!"})
+        }
+
+        return stripe.paymentMethods.retrieve(
+            req.body.paymentMethodId
+        ).then((paymentMethod) => {
+            sendResponse(res, 200, paymentMethod)
+        }).catch((err) => {
+            sendResponse(res, 500, {error: err})
+        })
+    })
+})
