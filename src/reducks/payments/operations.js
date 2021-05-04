@@ -40,7 +40,22 @@ export const retrievePaymentMethod = async (paymentMethodId) => {
     return paymentMethod.card
 }
 
-export const registerCard = (stripe, elements) => {
+const updatePaymentMethod = async (customerId, prevPaymentMethodId, nextPaymentMethodId) => {
+    const response = await fetch(BASE_URL + "/v1/updatePaymentMethod",{
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+            customerId: customerId,
+            prevPaymentMethodId: prevPaymentMethodId,
+            nextPaymentMethodId: nextPaymentMethodId
+        })
+    })
+    const paymentMethodResponse = await response.json()
+    const paymentMethod = JSON.parse(paymentMethodResponse.body)
+    return paymentMethod.card
+}
+
+export const registerCard = (stripe, elements, customerId) => {
     return async (dispatch, getState) => {
         console.log('getState(): ', getState());
         const user = getState().users
@@ -74,28 +89,50 @@ export const registerCard = (stripe, elements) => {
 
         const paymentMethodId = paymentMethod.id
 
-        const customerData = await createCustomer(email, paymentMethodId, uid)
-        console.log("customerData: ", customerData);
-
-        if(customerData.id === ""){
-            alert('Failed to register Card Info')
-            return;
-        }else{
-            const updateUserState = {
-                customer_id: customerData.id,
-                payment_method_id: paymentMethodId
+        if(customerId === ""){
+            const customerData = await createCustomer(email, paymentMethodId, uid)
+            console.log("customerData: ", customerData);
+    
+            if(customerData.id === ""){
+                alert('Failed to register Card Info')
+                return;
+            }else{
+                const updateUserState = {
+                    customer_id: customerData.id,
+                    payment_method_id: paymentMethodId
+                }
+    
+                db.collection('users').doc(uid)
+                    .update(updateUserState)
+                    .then(() => {
+                        dispatch(updateUserStateAction(updateUserState))
+                        dispatch(push('/user/mypage'))
+                    }).catch((error) => {
+                        //delete stripe customer
+                        alert('Failed to register Card Info')
+                        return;
+                    })
             }
+        }else{
+            const prevPaymentMethodId = getState().users.payment_method_id
+            const updatedPaymentMethod = await updatePaymentMethod(customerId, prevPaymentMethodId, paymentMethodId)
 
-            db.collection('users').doc(uid)
-                .update(updateUserState)
-                .then(() => {
-                    dispatch(updateUserStateAction(updateUserState))
-                    dispatch(push('/user/mypage'))
-                }).catch((error) => {
-                    //delete stripe customer
-                    alert('Failed to register Card Info')
-                    return;
-                })
+            if(!updatedPaymentMethod){
+                alert('Failed to update customer information')
+            }else{
+                const userState = {
+                    payment_method_id: paymentMethodId
+                }
+                db.collection('users').doc(uid)
+                    .update(userState)
+                    .then(() => {
+                        dispatch(updateUserStateAction(userState))
+                        alert('Successfully updated customer information!')
+                        dispatch(push('/user/mypage'))
+                    }).catch(() => {
+                        alert('Failed to update customer information')
+                    })
+            }
         }
     }
 }
